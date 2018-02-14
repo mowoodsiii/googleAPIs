@@ -75,9 +75,9 @@ def main():
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        if ("appointment" in event['summary'].lower()) or ("meet with" in event['summary'].lower()) or ("workshop" in event['summary'].lower()) or ("meeting" in event['summary'].lower()) or ("3D Printer Service" in event['summary'].lower()):
+        if ("appointment" in event['summary'].lower()) or ("meet with" in event['summary'].lower()) or ("workshop" in event['summary'].lower()) or ("meeting" in event['summary'].lower()) or ("3d printer service" in event['summary'].lower()):
             appointmentIds.append(event['id'])
-            if ("appointment" in event['summary'].lower() or "meet with" in event['summary'].lower() or "3D Printer Service" in event['summary'].lower()):
+            if ("appointment" in event['summary'].lower() or "meet with" in event['summary'].lower() or "3d printer service" in event['summary'].lower()):
                 event['colorId']='11' # bold red
                 print('Appointment: ',event['summary'])
             elif ("workshop" in event['summary'].lower()):
