@@ -21,6 +21,9 @@ SCOPES = 'https://www.googleapis.com/auth/calendar'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 
+# calID='colorado.edu_4vko1g9ooke1ssloilp5ov3360@group.calendar.google.com'
+calID='mawo4813@colorado.edu'
+
 
 def get_credentials():
     """Gets valid user credentials from storage.
@@ -63,7 +66,7 @@ def main():
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 100 events\n')
     eventsResult = service.events().list(
-        calendarId='colorado.edu_4vko1g9ooke1ssloilp5ov3360@group.calendar.google.com', timeMin=now, maxResults=100, singleEvents=True,
+        calendarId=calID, timeMin=now, maxResults=100, singleEvents=True,
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
     
@@ -72,14 +75,19 @@ def main():
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        if ("Appointment" in event['summary']) or ("WORKSHOP" in event['summary']):
+        if ("appointment" in event['summary'].lower()) or ("meet with" in event['summary'].lower()) or ("workshop" in event['summary'].lower()) or ("meeting" in event['summary'].lower()) or ("3D Printer Service" in event['summary'].lower()):
             appointmentIds.append(event['id'])
-            if ("Appointment" in event['summary']):
+            if ("appointment" in event['summary'].lower() or "meet with" in event['summary'].lower() or "3D Printer Service" in event['summary'].lower()):
                 event['colorId']='11' # bold red
-            else:
+                print('Appointment: ',event['summary'])
+            elif ("workshop" in event['summary'].lower()):
                 event['colorId']='3'  # lavender
-            service.events().update(calendarId='colorado.edu_4vko1g9ooke1ssloilp5ov3360@group.calendar.google.com', eventId=event['id'],body=event).execute()
-    print("Number of appointments found:",len(appointmentIds))
+                print('Workshop:    ',event['summary'])
+            elif ("meeting" in event['summary'].lower()):
+                event['colorId']='5'  # yellow
+                print('Meeting:    ',event['summary'])
+            service.events().update(calendarId=calID, eventId=event['id'],body=event).execute()
+    print("\nNumber of appointments found:",len(appointmentIds))
 
 if __name__ == '__main__':
     main()
