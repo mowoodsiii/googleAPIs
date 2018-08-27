@@ -66,7 +66,7 @@ def main():
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 100 events\n')
     eventsResult = service.events().list(
-        calendarId=calID, timeMin=now, maxResults=100, singleEvents=True,
+        calendarId=calID, timeMin=now, maxResults=50, singleEvents=True,
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
     
@@ -75,7 +75,8 @@ def main():
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        if ("appointment" in event['summary'].lower()) or ("meet with" in event['summary'].lower()) or ("workshop" in event['summary'].lower()) or ("meeting" in event['summary'].lower()) or ("3d printer service" in event['summary'].lower()):
+        if(1):
+        #if ("appointment" in event['summary'].lower()) or ("meet with" in event['summary'].lower()) or ("workshop" in event['summary'].lower()) or ("meeting" in event['summary'].lower()) or ("3d printer service" in event['summary'].lower()):
             appointmentIds.append(event['id'])
             if ("appointment" in event['summary'].lower() or "meet with" in event['summary'].lower() or "3d printer service" in event['summary'].lower()):
                 event['colorId']='11' # bold red
@@ -85,10 +86,10 @@ def main():
                 print('Workshop:    ',event['summary'])
             elif ("meeting" in event['summary'].lower()):
                 event['colorId']='5'  # yellow
-                print('Meeting:    ',event['summary'])
-            elif ("arives" not in event['summary'].lower() or "departs" not in event['summary'].lower() or "out to lunch" not in event['summary'].;ower()):
-                event['colorID'='9' # blue
-                print('Other:      ',event['summary'])
+                print('Meeting:     ',event['summary'])
+            elif ("arrives" not in event['summary'].lower() and "departs" not in event['summary'].lower() and "lunch" not in event['summary'].lower()):
+                event['colorId']='9' # blue
+                print('Other:       ',event['summary'])
             service.events().update(calendarId=calID, eventId=event['id'],body=event).execute()
     print("\nNumber of appointments found:",len(appointmentIds))
 
