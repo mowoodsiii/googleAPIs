@@ -86,6 +86,9 @@ def main():
             elif ("meeting" in event['summary'].lower()):
                 event['colorId']='5'  # yellow
                 print('Meeting:    ',event['summary'])
+            elif ("arives" not in event['summary'].lower() or "departs" not in event['summary'].lower() or "out to lunch" not in event['summary'].;ower()):
+                event['colorID'='9' # blue
+                print('Other:      ',event['summary'])
             service.events().update(calendarId=calID, eventId=event['id'],body=event).execute()
     print("\nNumber of appointments found:",len(appointmentIds))
 
