@@ -6,6 +6,7 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 
 import time
+import datetime
 import Adafruit_CharLCD as LCD
 from multiprocessing import Process
 
@@ -131,25 +132,27 @@ if __name__ == '__main__':
     [STATUS,WORKTODO] = readSpreadsheet(STATUS,SERVICE)
     print(STATUS)
     MODE=0
-    i = 1
+    i = 0
     while(1):
         displayStatus(MODE,STATUS,LCD)
         time.sleep(3.0)
         MODE = not MODE
         if i%20==0:
             [STATUS,WORKTODO] = readSpreadsheet(STATUS,SERVICE)
-        
-        if(WORKTODO['quotes']==0 and WORKTODO['ready']==0):
-            LED['red'].off()
-            LED['blue'].off()
-        elif(WORKTODO['quotes']==1 and WORKTODO['ready']==0):
-            LED['red'].off()
-            LED['blue'].on()
-        elif(WORKTODO['quotes']==0 and WORKTODO['ready']==1):
-            LED['red'].on()
-            LED['blue'].off()
-        else:
-            LED['red'].on()
-            LED['blue'].on()
+            currentHour = datetime.datetime.now().time()
+            print("Current hour: "+str(currentHour))
+            if(datetime.time(17)<=currentHour<=datetime.time(20)):
+                if(WORKTODO['quotes']==0 and WORKTODO['ready']==0):
+                    LED['red'].off()
+                    LED['blue'].off()
+                elif(WORKTODO['quotes']==1 and WORKTODO['ready']==0):
+                    LED['red'].off()
+                    LED['blue'].blink()
+                elif(WORKTODO['quotes']==0 and WORKTODO['ready']==1):
+                    LED['red'].blink()
+                    LED['blue'].off()
+                else:
+                    LED['red'].blink()
+                    LED['blue'].blink()
         
         i=i+1
