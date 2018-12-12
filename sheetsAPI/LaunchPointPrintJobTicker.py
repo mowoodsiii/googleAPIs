@@ -83,9 +83,9 @@ def demo():
 
 def readSpreadsheet(status,service):
     workToDo = {'quotes':0,'ready':0}
+    SPREADSHEET_ID = '18N4BR8f5O6wPmNLS29_rp5L01cWBCCiSf9wTMMLp2qw'
     for printer in status:
-        RANGE_NAME = printer+' Printer!A3:W'
-        SPREADSHEET_ID = "18N4BR8f5O6wPmNLS29_rp5L01cWBCCiSf9wTMMLp2qw"
+        RANGE_NAME = printer+' Printer!A3:A20'
         result = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=RANGE_NAME).execute()
         values = result.get('values', [])
         pendingQuotes = 0 
@@ -105,8 +105,6 @@ def readSpreadsheet(status,service):
                         readyToPrint = readyToPrint + 1
                         workToDo['ready'] = 1
                     total=total+1
-                    print("Total: "+str(total))
-
             status[printer]={'pendingQuote':pendingQuotes, 'readyToPrint':readyToPrint}
     print('Ready: '+str(workToDo['ready'])+'   Quote: '+str(workToDo['quotes'])+'\n')
     return [status,workToDo]
