@@ -139,20 +139,21 @@ if __name__ == '__main__':
         MODE = not MODE
         if i%20==0:
             [STATUS,WORKTODO] = readSpreadsheet(STATUS,SERVICE)
-            currentHour = datetime.datetime.now().time()
-            print("Current hour: "+str(currentHour))
-            if(datetime.time(17)<=currentHour<=datetime.time(20)):
-                if(WORKTODO['quotes']==0 and WORKTODO['ready']==0):
-                    LED['red'].off()
-                    LED['blue'].off()
-                elif(WORKTODO['quotes']==1 and WORKTODO['ready']==0):
-                    LED['red'].off()
-                    LED['blue'].blink()
-                elif(WORKTODO['quotes']==0 and WORKTODO['ready']==1):
-                    LED['red'].blink()
-                    LED['blue'].off()
-                else:
-                    LED['red'].blink()
-                    LED['blue'].blink()
-        
+            currentTime = datetime.datetime.now().time()
+            print("Current time: "+str(currentTime))
+            
+            if(WORKTODO['quotes']==0):
+                LED['red'].off()
+            elif(datetime.(16,45 <= currentTime <= datetime.time(19,35)):
+                LED['red'].blink()
+            else:
+                LED['red'].on()
+            
+            if(WORKTODO['ready']==0):
+                LED['blue'].off()
+            elif(datetime.(19,00) <= currentTime <= datetime.time(20,30)):
+                LED['blue'].blink()
+            else:
+                LED['blue'].on()
+            
         i=i+1
